@@ -1,17 +1,8 @@
-DEFAULT_FILE_PATH = 'movies.txt'
+file_path = ARGV.first || 'movies.txt'
 
-file_path = if File.exist?(ARGV.first.to_s)
-              ARGV.first
-            elsif File.exist?(DEFAULT_FILE_PATH)
-              puts 'Incorect entered file path or file not found. '\
-                   'Program use default file.'
-              DEFAULT_FILE_PATH 
-            else
-              puts 'File not found'
-              exit
-            end
+abort 'File not found' unless File.exist?(file_path)
 
-rating_list = File.readlines(file_path)
+rating_list = File.open(file_path, 'r')
                   .map { |movie| movie.split('|') }
                   .find_all { |movie| movie[1].include?('Max') }
                   .sort_by { |movie| movie[7] }.reverse
